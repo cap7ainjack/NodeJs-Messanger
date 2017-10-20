@@ -1,0 +1,28 @@
+extends ../layout
+
+block content
+    .container.chat-wrapper
+        .wrapper.chat
+            if messages
+                each message in messages
+                    - positionClass= message.user._id.equals(user._id)? 'right' : 'left'
+                    - likedClass = message.isLiked? 'liked': ''
+                    
+                    .thread-message(class=positionClass + ' ' + likedClass)
+                        if message.isLink
+                            a(href=message.content target='_blank')= message.content
+                                if message.isImage
+                                    img.message-img(src=message.content)
+                        else
+                            span= message.content
+                    .clear
+        .wrapper
+        if blocked
+            h2 You are blocked.
+        else
+            form(method='post')
+            .form-group
+                textarea#chat-form.input-field(name='content')= newMessage
+                input.btn.btn-primary(type='submit' value='Send')
+
+
